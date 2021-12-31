@@ -11,6 +11,7 @@ Library           RPA.PDF
 Library           RPA.FileSystem
 Library           RPA.Archive
 Library           RPA.FileSystem
+Library           RPA.Robocorp.Vault
 
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
@@ -86,7 +87,8 @@ Embed the robot screenshot to the receipt PDF file
     Remove File    ${preview}
 
 Create a ZIP file of the receipts
-    Archive Folder With Zip    ${OUTPUT_DIR}${/}    ${OUTPUT_DIR}${/}receipts.zip    include=*.pdf
+    ${secret}=    Get Secret    receipt_file_name
+    Archive Folder With Zip    ${OUTPUT_DIR}${/}    ${OUTPUT_DIR}${/}${secret}[file_name_zip]    include=*.pdf
     Delete pdf files
 
 Close the browser
