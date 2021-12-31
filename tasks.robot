@@ -12,11 +12,13 @@ Library           RPA.FileSystem
 Library           RPA.Archive
 Library           RPA.FileSystem
 Library           RPA.Robocorp.Vault
+Library           RPA.Dialogs
 
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
+    ${url}    Ask for the csv url
     Open the robot order website
-    ${orders}=    Get orders
+    ${orders}=    Get orders    ${url}
     FOR    ${row}    IN    @{orders}
         Close the annoying modal
         Fill the form    ${row}
@@ -35,6 +37,7 @@ Open the robot order website
     Open Available Browser    https://robotsparebinindustries.com/#/robot-order
 
 Get orders
+    [Arguments]    ${url}
     #Download    https://robotsparebinindustries.com/orders.csv    overwrite=True
     ${orders}=    Read table from CSV    orders.csv    header=True
     [Return]    ${orders}
@@ -100,3 +103,8 @@ Delete pdf files
         ${f_ext}    Get File Extension    ${file}
         Run keyword if    '${f_ext}' == '.pdf'    Remove file    ${file}
     END
+
+Ask for the csv url
+    Add text input    url    label=CSV Url
+    ${response}=    Run dialog
+    [Return]    ${response.url}
