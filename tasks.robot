@@ -10,6 +10,7 @@ Library           RPA.Tables
 Library           RPA.PDF
 Library           RPA.FileSystem
 Library           RPA.Archive
+Library           RPA.FileSystem
 
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
@@ -86,6 +87,14 @@ Embed the robot screenshot to the receipt PDF file
 
 Create a ZIP file of the receipts
     Archive Folder With Zip    ${OUTPUT_DIR}${/}    ${OUTPUT_DIR}${/}receipts.zip    include=*.pdf
+    Delete pdf files
 
 Close the browser
     Close Browser
+
+Delete pdf files
+    ${files}=    List files in directory    ${OUTPUT_DIR}${/}
+    FOR    ${file}    IN    @{FILES}
+        ${f_ext}    Get File Extension    ${file}
+        Run keyword if    '${f_ext}' == '.pdf'    Remove file    ${file}
+    END
